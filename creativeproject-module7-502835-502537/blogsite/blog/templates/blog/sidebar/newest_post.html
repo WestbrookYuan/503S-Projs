@@ -1,0 +1,7 @@
+{% load category %}
+{% get_newest_post as new_posts %}
+{% for post in new_posts %}
+    <ul>
+        <li><a href="{% url 'blog:post_details' post.id %}">{{ post.title }}</a></li>
+    </ul>
+{% endfor %}

@@ -1,0 +1,26 @@
+*******init django project*******
+django-admin startproject <project name>
+
+*******init django app*******
+python3 manage.py startapp blog
+
+*******run server*******
+python3 manage.py runserver
+python3 manage.py runserver 0:3456
+
+********let system find sql version ********
+export LD_LIBRARY_PATH="/usr/local/lib"
+
+************ configure database ************
+ sudo yum update
+sudo yum install python3-devel mysql mysql-devel gcc
+pip install mysqlclient
+
+************ update database by models ************
+python3 manage.py makemigrations
+python3 manage.py migrate
+
+superuser for django:
+Username (leave blank to use 'hive'): admin
+Email address: hiveyuan@gmail.com
+Password: 623383027

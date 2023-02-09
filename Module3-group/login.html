@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Story Sharing Website</title>
+        <link rel="stylesheet" href="style.css" type="text/css">
+    </head>
+    <body>
+        <h1>Story Sharing Website</h1>
+        <div style="float: right;">
+            <form class="sameline" action="register.html" method="GET">
+                <div>
+                    <button type="submit">Register</button>
+                </div>
+            </form>
+            <form class="sameline" action="home.php" method="GET">
+                <div>
+                    <button type="submit">Home</button>
+                </div>
+            </form>
+        </div>
+        <div style="text-align: center; width: 60%; margin: 0 auto; vertical-align: middle;">
+            <h2>Log in</h2>
+            <form action="loginAction.php" method="POST">
+                <div class="wholeline">
+                    <label style="width:200px; float:left;">Username</label>
+                    <input class="login" style="width: 300px;" type="text" placeholder="Enter user name" name="username" id="usernameID" required>
+                </div>
+                <div class="wholeline">
+                    <label style="width:200px; float:left;">Password</label>
+                    <input class="login" style="width: 300px;" type="password" placeholder="Enter password" name="password" id="passwordID" required>
+                </div>
+                <div>
+                    <button type="submit">Log In</button>
+                </div>
+            </form>
+        </div>
+    </body>
+</html>

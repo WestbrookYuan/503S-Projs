@@ -1,0 +1,7 @@
+{% load category %}
+{% get_comments as comments %}
+{% for comment in comments %}
+    <ul>
+        <li><strong>{{comment.content}}</strong> by {{ comment.user }}</li>
+    </ul>
+{% endfor %}

@@ -1,0 +1,98 @@
+{% load static category %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>
+            {% block title %}
+                Comment
+            {% endblock %}
+        </title>
+        <link rel="stylesheet" href="{% static 'users/bulma.css' %}">
+    </head>
+    <body>
+        <!-- Navigation bar -->
+        <nav class="navbar is-primary" role="navigation" aria-label="main navigation">
+            <div class="navbar-brand">
+                <a class="navbar-item" href="/">
+                    <img src="{% static 'users/images/blog_icon.jpg' %}" width="112" height="28">
+                </a>
+            </div>
+          
+            <div id="navbarBasicExample" class="navbar-menu">
+                <div class="navbar-start">
+                    {% block navbar-start %}
+                    <a class="navbar-item" href="/">
+                    Home
+                    </a>
+                    
+                    <!-- display all categories -->
+                    {% get_category_list as categories %}
+                    {% for category in categories %}
+                        <a class="navbar-item" href="{% url 'blog:posts_of_category' category.id %}">
+                            {{ category.name }}
+                        </a>
+                    {% endfor %}
+                    {% endblock %}
+                </div>
+          
+                <div class="navbar-end">
+                    {% block navbar-end %}
+                    <div class="navbar-item">
+
+                        {% if user.is_authenticated %}
+                            <div class="buttons">
+                                <a class="button is-outline is-light" href="{% url 'blog:create_blog' %}">New Post</a>
+                                <a class="button is-outline is-light" href="{% url 'users:user_profile' %}">{{request.user.username}}</a>
+                                <a class="button is-primary" href="{% url 'users:logout' %}">Logout</a>
+                            </div>
+                        {% else %}
+                            <div class="buttons">
+                                <a class="button is-primary" href="{% url 'users:register' %}" target="_blank">
+                                <strong>Sign up</strong>
+                                </a>
+                                <a class="button is-light" href="{% url 'users:login' %}" target="_blank">
+                                Log in
+                                </a>
+                            </div>
+                        {% endif %}
+
+                    </div>
+                    {% endblock %}
+                </div>
+            </div>
+        </nav>
+        
+        <div class='box'>
+            
+            <form action="{% url 'blog:create_comment' post.id %}" method="post">
+                {% csrf_token %}
+                <div class="field is-horizontal">
+                    <div class="field-label is-normal">
+                      <label for="{{ field.id_for_label }}" class="label">Comment</label>
+                    </div>
+                    <div class="field-body">
+                      <div class="field">
+                        <div class="control">
+                           <input type="text" name="content" id="id_content" class="input" placeholder="please enter your comment" maxlength="200" minlength="6">
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                <input class="button" type="submit" value="submit">
+            </form>
+        </div>
+
+        {% block footer %}
+        <footer class="footer container">
+            <div class="has-text-centered">
+                <div class="is-size-7 has-text-grey-light pt-1 pb-1">
+                    <span class="mr-3">WUSTL Blog: CSE503S Course Project</span><br>
+                    <span class="mr-3">Developers: Yuan Liu, Tengyan Yuan</span><br>
+                    <span class="mr-3">Framework: Django, Bulma, CkEditor</span>
+                </div>
+            </div>
+        </footer>
+        {% endblock %}
+    </body>
+</html>

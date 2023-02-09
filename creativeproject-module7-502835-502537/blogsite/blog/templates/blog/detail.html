@@ -1,0 +1,76 @@
+{% extends 'blog/base.html' %}
+
+{% block left-section %}
+    <div class="box">
+        <h1 class="title is-size-5 has-text-weight-bold">
+            {{post.title}}
+        </h1>
+
+        <div class="is-size-7 has-text-grey-light pt-1 pb-1">
+            <span class="mr-3">Author: {{post.owner}}</span>
+            <span class="mr-3">Date: {{post.add_date}}</span>
+            <span class="mr-3">Last modified: {{post.pub_date}}</span>
+            {% if request.user.username|stringformat:'s' == post.owner|stringformat:'s' %}
+            <span class="mr-3"><a href="{% url 'blog:edit_blog' post.id %}">modify</a></span>
+            {% endif %}
+            <span class="mr-3">view: {{post.view_counts}}</span>
+        </div>
+
+        <div class="content">
+            {{ post.content|safe }}
+        </div>
+        
+    </div>
+    {% if request.user.is_authenticated %}
+    <div class="box">
+        <span class="mr-3"><a href="{% url 'blog:create_comment' post.id %}">comment</a></span>
+    </div>
+    {% else %}
+    <div class="box">
+        <span class="mr-3">only logined user can comment</span>        
+    </div>
+    {% endif %}
+    <div class="box">
+        
+        {% if comments %}
+        <h1 class="title is-size-5 has-text-weight-bold">
+            Comments:
+        </h1>
+        {% for comment in comments %}
+        <div class="is-size-7 has-text-grey-light pt-1 pb-1">
+            <span class="mr-3">Date: {{comment.add_time}}</span>
+            <span class="mr-3">Comment By: {{comment.user}}</span>
+        </div>
+        <div class="content">
+            {{ comment.content }}
+        </div>
+        {% endfor %}
+        {% else %}
+        <h1 class="title is-size-5 has-text-weight-bold">
+            No comments
+        </h1>
+        {% endif %}
+    </div>
+
+    <div class="box">
+        <div class="level">
+            <div class="level-left">
+                {% if prev_post%}
+                <span>prev: </span><a href="{% url 'blog:post_details' prev_post.id %}" class="'level-item">{{prev_post.title}}</a>
+                {% else %}
+                <span class="has-text-danger-dark is-size-7"> No previous blog </span>
+                {% endif %}
+            </div>
+            <div class="level-right">
+                {% if next_post%}
+                <span>next: </span><a href="{% url 'blog:post_details' next_post.id %}" class="'level-item">{{next_post.title}}</a>
+                {% else %}
+                <span class="has-text-danger-dark is-size-7"> No next blog </span>
+                {% endif %}
+                
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}

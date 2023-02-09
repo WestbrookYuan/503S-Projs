@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+
+<html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <title>Chat Room</title>
+      <link rel="stylesheet" href="./style.css">
+      <script src="./jquery-3.2.1.js"></script>
+      <script src="/socket.io/socket.io.js"></script>
+      <script src="./functions.js"></script>
+      <script src="./client.js"></script>
+   </head>
+   <body>
+      <div class="container clearfix">
+          <!-- add group form -->
+        <div class="form-popup" id="addGroupForm">
+          <div class="form-container" id="AddGroupUsers">
+              <h1>New Group</h1>
+              <label for="new_group"><b>Groupname</b></label>
+              <input id="new_group" type="text" placeholder="Enter group name" name="new_group" required>
+              <input type="checkbox" name="private" id="private" value="Private">
+              <label for="private">private room</label>
+              <br>
+              <label for="private_room_pwd"><b>Password</b></label>
+              <input type="text" name="private_room_pwd" id="private_room_pwd">
+              <button type="button" id="addGroup_confirm"  class="btn">Add Group</button>
+              <button type="button" id="addGroup_cancel" class="btn cancel">Cancel</button>
+          </div>
+        </div>
+          <!-- group list -->
+          <div class="group_list" id="group_list">
+
+            <div class="group-header" id="group_header">
+              <div class="group-list-title">All Groups</div>
+              <button id="create_group_btn" class="add">⊕︀</button>
+              <!-- <i class="fa fa-search"></i> -->
+           </div>
+
+            <div class="search">
+               <input id="search_group" type="text" placeholder="search">
+               <i class="fa fa-search"></i>
+            </div>
+
+            <!-- panel to display all groups  -->
+            <ul class="list" id="groups">
+
+            </ul>
+          </div>
+          <!-- member list -->
+          <div class="group_list" id="member_list">
+
+            <div class="group-header" id="member_header">
+              <div class="group-list-title" id="memberHeader_title">Group Members</div>
+              <!-- <i class="fa fa-search"></i> -->
+           </div>
+
+            <div class="search" id="search_bar">
+               <input id="search_member" type="text" placeholder="search">
+               <i class="fa fa-search"></i>
+            </div>
+
+            <!-- panel to display members in current group  -->
+            <ul class="list" id="members">
+
+            </ul>
+          </div>
+         
+         <!-- chat window -->
+         <div class="chat">
+
+            <!-- chat-header -->
+            <div class="chat-header clearfix" id="chat_header">
+              <img src="./images/group.jpg" alt="avatar">
+              <div class="chat-about">
+                  <div class="chat-with" id="chat_group">Hive's public group</div>
+                  <div>
+                    <button class="quit" id="quit" value="some_group_id">quit</button>
+                  </div>
+              </div>
+            </div> 
+           
+           <div class="chat-history" id="chat_page">
+             <ul id="chat_history">
+               
+             </ul>
+             
+           </div> <!-- end chat-history -->
+           
+           <div class="chat-message clearfix" id="message_div">
+             <textarea name="message-to-send" id="message-to-send" placeholder ="Type your message" rows="3"></textarea>
+                     
+             <i class="fa fa-file-o"></i> &nbsp;&nbsp;&nbsp;
+             <i class="fa fa-file-image-o"></i>
+             
+             <button id="sendBtn">Send</button>
+     
+           </div> <!-- end chat-message -->
+         </div> <!-- end chat -->
+         
+      </div>
+   </body>
+</html>

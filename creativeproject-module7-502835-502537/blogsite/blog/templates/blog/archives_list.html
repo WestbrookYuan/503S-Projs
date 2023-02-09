@@ -1,0 +1,13 @@
+{% extends 'blog/base.html' %}
+
+{% block title %} {{ year }} {{ month }}'s archive{% endblock %}
+
+{% block archives %}
+    <div class="box">
+        monthly archive: {{ year }} {{ month }}
+        <div class="tags has-addons is-pulled-right">
+          <span class="tag">total</span>
+          <span class="tag is-primary">{{ post_list.count }} </span>
+        </div>
+    </div>
+{% endblock  %}

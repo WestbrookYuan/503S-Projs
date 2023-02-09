@@ -1,0 +1,142 @@
+{% load static category %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>
+            {% block title %}
+                WUSTL Blog
+            {% endblock %}
+        </title>
+        <link rel="stylesheet" href="{% static 'users/bulma.css' %}">
+    </head>
+    <body>
+        <!-- Navigation bar -->
+        <nav class="navbar is-primary" aria-label="main navigation">
+            <div class="navbar-brand">
+                <a class="navbar-item" href="/">
+                    <img src="{% static 'users/images/blog_icon.jpg' %}" width="112" height="28" alt='image failed to load'>
+                </a>
+            </div>
+          
+            <div id="navbarBasicExample" class="navbar-menu">
+                <div class="navbar-start">
+                    {% block navbar-start %}
+                    <a class="navbar-item" href="/">
+                    Home
+                    </a>
+                    
+                    <!-- display all categories -->
+                    {% get_category_list as categories %}
+                    {% for category in categories %}
+                        <a class="navbar-item" href="{% url 'blog:posts_of_category' category.id %}">
+                            {{ category.name }}
+                        </a>
+                    {% endfor %}
+                    {% endblock %}
+                </div>
+          
+                <div class="navbar-end">
+                    {% block navbar-end %}
+                    <div class="navbar-item">
+
+                        {% if user.is_authenticated %}
+                            <div class="buttons">
+                                <a class="button is-outline is-light" href="{% url 'blog:create_blog' %}">New Post</a>
+                                <a class="button is-outline is-light" href="{% url 'users:user_profile' %}">{{request.user.username}}</a>
+                                <a class="button is-primary" href="{% url 'users:logout' %}">Logout</a>
+                            </div>
+                        {% else %}
+                            <div class="buttons">
+                                <a class="button is-primary" href="{% url 'users:register' %}" target="_blank">
+                                <strong>Sign up</strong>
+                                </a>
+                                <a class="button is-light" href="{% url 'users:login' %}" target="_blank">
+                                Log in
+                                </a>
+                            </div>
+                        {% endif %}
+
+                    </div>
+                    {% endblock %}
+                </div>
+            </div>
+        </nav>
+        
+        <!-- Display All Posts -->
+        <section class="section">
+
+            <div class="container">
+                <div class="columns">
+                    <div class="column is-8">
+                        {% block left-section %}
+                        {% block archives %} {% endblock %}
+                        {% if page_obj %}
+                            {% for post in page_obj %}
+                                <div class="box">
+                                    <h1 class="is-size-5 has-text-weight-bold">
+                                        <a href="{% url 'blog:post_details' post.id %}">{{post.title}}</a>
+                                    </h1>
+                                    <div class="is-size-7 has-text-grey-light pt-1 pb-1">
+                                        <span class="mr-3">Author: {{post.owner}}</span>
+                                        <span class="mr-3">Date: {{post.add_date}}</span>
+                                        <span class="mr-3">Last modified: {{post.pub_date}}</span>
+                                    </div>
+                                    <p>{{post.abstract|truncatechars:200}}</p>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="box has-text-danger">No relevant blogs!</div>
+                        {% endif %}
+
+                        {% if page_obj %}
+                            <nav class="pagination is-centered" aria-label="pagination">
+                            {% if page_obj.has_previous %}
+                                <a class="pagination-previous" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                            {% endif %}
+                            {% if page_obj.has_next %}
+                            <a class="pagination-next" href="?page={{ page_obj.next_page_number }}">Next page</a>
+                            {% endif %}
+                            <ul class="pagination-list">
+                            {% if page_obj.has_previous %}
+                                <li><a class="pagination-link" aria-label="Goto page 45" href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a></li>
+                            {% endif %}
+                                <li><a class="pagination-link is-current" aria-label="Page {{ page_obj.number }}" aria-current="page" href='?page={{ page_obj.number }}'>{{ page_obj.number }}</a></li>
+                            {% if page_obj.has_next %}
+                                <li><a class="pagination-link" href="?page={{ page_obj.next_page_number }}" aria-label="Goto page {{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a></li>
+                            {% endif %}
+                            </ul>
+                            </nav>
+                        {% endif %} 
+
+                        {% endblock %}
+                        
+                    </div>
+                    <div class="column is-4">
+                        {% block right %}
+                            {% get_sidebar_list as sidebars %}
+                                {% for sidebar in sidebars %}
+                                    <div class="box">
+                                        <h1 class="is-size-5 title"> {{ sidebar.title }} </h1>
+                                        <p>{{ sidebar.get_content|safe }}</p>
+                                    </div>
+                            {% endfor %}
+                        {% endblock %}
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        {% block footer %}
+        <footer class="footer container">
+            <div class="has-text-centered">
+                <div class="is-size-7 has-text-grey-light pt-1 pb-1">
+                    <span class="mr-3">WUSTL Blog: CSE503S Course Project</span><br>
+                    <span class="mr-3">Developers: Yuan Liu, Tengyan Yuan</span><br>
+                    <span class="mr-3">Framework: Django, Bulma, CkEditor</span>
+                </div>
+            </div>
+        </footer>
+        {% endblock %}
+    </body>
+</html>

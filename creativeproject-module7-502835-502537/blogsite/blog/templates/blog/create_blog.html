@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+{% load static %}
+{% load static category %}
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Create Post</title>
+        <link rel="stylesheet" href=" {% static 'users/bulma.css' %} ">
+        <link rel="stylesheet" href=" {% static 'users/style.css' %} ">
+        <script src="{% static 'users/js/all.min.js' %}"></script>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script type="text/javascript" src="{% static "ckeditor/ckeditor-init.js" %}"></script>
+    <script type="text/javascript" src="{% static "ckeditor/ckeditor/ckeditor.js" %}"></script>
+    </head>
+    <body>
+
+        <!-- Navigation bar -->
+        <nav class="navbar is-primary" role="navigation" aria-label="main navigation">
+            <div class="navbar-brand">
+                <a class="navbar-item" href="/">
+                    <img src="{% static 'users/images/blog_icon.jpg' %}" width="112" height="28">
+                </a>
+          
+                <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                </a>
+            </div>
+          
+            <div id="navbarBasicExample" class="navbar-menu">
+                <div class="navbar-start">
+                    {% block navbar-start %}
+                    <a class="navbar-item" href="/">
+                    Home
+                    </a>
+                    
+                    <!-- display all categories -->
+                    {% get_category_list as categories %}
+                    {% for category in categories %}
+                        <a class="navbar-item" href="{% url 'blog:posts_of_category' category.id %}">
+                            {{ category.name }}
+                        </a>
+                    {% endfor %}
+                    {% endblock %}
+                </div>
+          
+                <div class="navbar-end">
+                    {% block navbar-end %}
+                    <div class="navbar-item">
+
+                        {% if user.is_authenticated %}
+                            <div class="buttons">
+                                <a class="button is-outline is-light" href="{% url 'users:user_profile' %}">{{request.user.username}}</a>
+                                <a class="button is-primary" href="{% url 'users:logout' %}">Logout</a>
+                            </div>
+                        {% else %}
+                            <div class="buttons">
+                                <a class="button is-primary" href="{% url 'users:register' %}" target="_blank">
+                                <strong>Sign up</strong>
+                                </a>
+                                <a class="button is-light" href="{% url 'users:login' %}" target="_blank">
+                                Log in
+                                </a>
+                            </div>
+                        {% endif %}
+
+                    </div>
+                    {% endblock %}
+                </div>
+            </div>
+        </nav>
+        
+        <div class="content">
+            <div class="box is-radiusless is-shadowless">
+              
+                <div class="tabs">
+                    <ul> 
+                      
+                      {% block title %}
+                      <li class="is-active"><a>Create Blog</a></li> 
+                      {% endblock %}
+                                                           
+                    </ul>
+                </div>
+
+        
+            
+            {% block content %}
+            <div class="content">         
+                <form action="{% url 'blog:create_blog' %}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="field is-horizontal">
+                        <div class="field-label is-normal">
+                            <label for="{{ post_form.owner.id_for_label }}" class="label">{{ post_form.title.label }}</label>
+                        </div>
+                        <div class="field-body">
+                            <div class="field">
+                                <div class="control">
+                                    {{post_form.title}}
+                                </div>
+                            </div>
+                        </div>
+                    </div> 
+
+                    <div class="field is-horizontal">
+                        <div class="field-label is-normal">
+                            <label for="{{ post_form.owner.id_for_label }}" class="label">{{ post_form.owner.label }}</label>
+                        </div>
+                        <div class="field-body">
+                            <div class="field">
+                                <div class="control">
+                                    {{ post_form.owner }}
+                                </div>
+                            </div>
+                        </div>
+                    </div> 
+                   
+                    <div class="field is-horizontal">
+                        <div class="field-label is-normal">
+                        <label for="{{ post_form.abstract.id_for_label }}" class="label">{{ post_form.abstract.label }}</label>
+                        </div>
+                        <div class="field-body">
+                        <div class="field">
+                            <div class="control">
+                                {{post_form.abstract}}
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+
+                    <div class="field is-horizontal">
+                        <div class="field-label is-normal">
+                        <label for="{{ post_form.category.id_for_label }}" class="label">{{ post_form.category.label }}</label>
+                        </div>
+                        <div class="field-body">
+                        <div class="field">
+                            <div class="control">
+                                {{ post_form.category }}
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+
+                    <div class="field is-horizontal">
+                        <div class="field-label is-normal">
+                        <label for="{{ post_form.tags.id_for_label }}" class="label">{{ post_form.tags.label }}</label>
+                        </div>
+                        <div class="field-body">
+                        <div class="field">
+                            <div class="control">
+                                {{ post_form.tags }}
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+
+                    <div class="field is-horizontal">
+                        <div class="field-label is-normal">
+                        <label for="{{ post_form.content.id_for_label }}" class="label">{{ post_form.content.label }}</label>
+                        </div>
+                        <div class="field-body">
+                        <div class="field">
+                            <div class="control">
+                                {{ post_form.content }}
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                    
+                    <input class=" button is-primary is-pulled-right" type="submit" value="publish">
+                    <div class=" is-clearfix"></div>
+                    
+                </form>
+              </div>
+            {% endblock %}
+           
+            </div>
+        </div> 
+    </body>
+</html>
+
+{% comment %} <textarea id="blog_editor"></textarea> {% endcomment %}
